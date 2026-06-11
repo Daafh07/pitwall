@@ -15,7 +15,7 @@ export default function Footer() {
       </a>
 
       {/* TOP */}
-      <button className="flex items-center justify-center w-[120px] h-[40px] rounded-[31px] border-4 border-[#F4F4ED] bg-transparent">
+      <button onClick={() => window.scrollTo({top: 0, behavior: "smooth"})} className="flex items-center justify-center w-[120px] h-[40px] rounded-[31px] border-4 border-[#F4F4ED] cursor-pointer bg-transparent">
         <span className="font-semibold text-[14px] text-[#F4F4ED]">TOP</span>
       </button>
 
