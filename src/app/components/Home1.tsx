@@ -1,5 +1,6 @@
 import { tracks } from "../lib/tracks";
 import TrackCanvas from "./TrackCanvas";
+import { LinesLeft, LinesRight } from "./Lines";
 
 type TrackKey = keyof typeof tracks;
 type Track = typeof tracks[TrackKey];
@@ -15,11 +16,11 @@ export default function Home1({track}: {track: Track}) {
   return (
     <section className="relative min-h-screen pt-[70px] pb-[55px]" style={{ background: `${track.gradientDown}` }}>
 
-        <img src="/icons/lines-left.svg" alt="" className="absolute left-0 top-[110px] h-[88px] pointer-events-none" />
-        <img src="/icons/lines-right.svg" alt="" className="absolute right-0 top-[110px] h-[88px] pointer-events-none" />
+        <LinesLeft color={track.colorText} className="absolute left-0 top-[105px] h-[88px] pointer-events-none" />
+        <LinesRight color={track.colorText} className="absolute right-0 top-[110px] h-[88px] pointer-events-none" />
 
         <div className="flex flex-col items-center gap-0">
-            <p className="font-semibold text-[20px]" style={{ color: track.colorText }}>UPCOMING RACE</p>
+            <p className="font-semibold text-[18px]" style={{ color: track.colorText }}>UPCOMING RACE</p>
             <h1 className="font-display text-[135px] leading-none -mt-2" style={{ color: track.colorText }}>
                 {track.name}
             </h1>
@@ -27,7 +28,9 @@ export default function Home1({track}: {track: Track}) {
 
         {/* Links */}
         <div className="relative ml-[60px] mr-[60px] mt-2 h-[520px] flex">
-            <img src="/track-box.svg" alt="" className="absolute inset-0 w-full h-full" />
+            <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" viewBox="0 0 1367 616" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 w-full h-full">
+              <path d="M1267.4 613H29C14.6406 613 3 601.359 3 587V312.252C3 305.216 5.85183 298.48 10.9042 293.583L54.9832 250.858C60.0356 245.961 62.8875 239.225 62.8875 232.189V29C62.8875 14.6406 74.528 3 88.8874 3H1338C1352.36 3 1364 14.6406 1364 29L1364 436.847C1364 446.724 1358.4 455.748 1349.56 460.138L1307.84 480.834C1298.99 485.223 1293.4 494.247 1293.4 504.125L1293.4 587C1293.4 601.359 1281.76 613 1267.4 613Z" stroke={track.colorText} strokeWidth="6" />
+            </svg>
 
             <div className="flex flex-col items-center py-6 px-2 w-[54px] h-full">
 
@@ -44,70 +47,63 @@ export default function Home1({track}: {track: Track}) {
 
             <img src="/icons/f1-logo.svg" alt="" className="absolute bottom-6 left-6 w-[70px]" />
 
-        {/* Midden + rechts */}
-        <div className="flex flex-1 h-full px-6 pt-4 pb-6">
+        
+        <div className="absolute inset-0">
+            <TrackCanvas
+              trackFile={track.name}
+              color={track.colorAccent}
+              mirrorX={track.name === "Monaco"}
+            />
+        </div>
 
-            {/* Stats + lege ruimte */}
-            <div className="flex flex-col flex-1">
-                <div className="flex gap-12">
-                    <div className="flex flex-col">
-                        <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>WHEN</p>
-                        <p className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</p>
-                        <p className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</p>
-                    </div>
-                    <div className="flex flex-col">
-                        <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>LENGHT</p>
-                        <div className="flex items-end gap-1">
-                            <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</p>
-                            <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
-                        </div>
-                    </div>
-                    <div className="flex flex-col">
-                        <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>DISTANCE</p>
-                        <div className="flex items-end gap-1">
-                            <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</p>
-                            <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
-                        </div>
+        {/* Teksten bovenop canvas */}
+        <div className="flex flex-1 h-full px-6 pt-4 pb-6 pointer-events-none">
+            {/* Stats links */}
+            <div className="flex gap-12">
+                <div className="flex flex-col">
+                    <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>WHEN</p>
+                    <p className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</p>
+                    <p className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</p>
+                </div>
+                <div className="flex flex-col">
+                    <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>LENGHT</p>
+                    <div className="flex items-end gap-1">
+                        <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</p>
+                        <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
                     </div>
                 </div>
-
-                {/* Track */}
-                    <div className="flex-1 w-full">
-                        <TrackCanvas />
+                <div className="flex flex-col">
+                    <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>DISTANCE</p>
+                    <div className="flex items-end gap-1">
+                        <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</p>
+                        <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
                     </div>
+                </div>
             </div>
+        </div>
 
-            
-
-            {/* Rechter kolom */}
-            <div className="flex flex-col w-[200px] gap-6">
-                <div>
-                    <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>FACTS</p>
-                    <p className="font-semibold text-[12px] text-white mt-1">{track.facts}</p>
-                </div>
-                <div>
-                    <p className="font-semibold text-[8px] border-b" style={{ color: track.colorText, borderColor: track.colorAccent + '40' }}>SCHEDULE</p>
-                    <div className="flex flex-col mt-1">
-                        {Object.values(track.schedule).map((item, index) => (
-                            <div key={index} className="flex border-b" style={{ borderColor: track.colorAccent + '40' }}>
-                                <p className="font-display text-[20px] leading-tight w-[110px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</p>
-                                <p className="font-display text-[20px] leading-tight w-[70px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</p>
-                                <p className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</p>
-                            </div>
-                        ))}
-                    </div>
-                </div>
-
-                <div className="mt-auto pt-40">
-
-                    <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>CIRCUIT RECORD</p>
-                    <p className="font-semibold text-[12px] text-white" >{track.circuit_record} {track.record_driver}</p>
-
-                </div>
-
-
+        {/* Rechter kolom: absolute rechts */}
+        <div className="absolute top-4 right-6 bottom-4 flex flex-col w-[200px] gap-6">
+            <div>
+                <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>FACTS</p>
+                <p className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</p>
             </div>
-
+            <div>
+                <p className="font-semibold text-[8px] border-b" style={{ color: track.colorText, borderColor: track.colorAccent + '40' }}>SCHEDULE</p>
+                <div className="flex flex-col mt-1">
+                    {Object.values(track.schedule).map((item, index) => (
+                        <div key={index} className="flex border-b" style={{ borderColor: track.colorAccent + '40' }}>
+                            <p className="font-display text-[20px] leading-tight w-[110px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</p>
+                            <p className="font-display text-[20px] leading-tight w-[70px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</p>
+                            <p className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</p>
+                        </div>
+                    ))}
+                </div>
+            </div>
+            <div className="mt-auto">
+                <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>CIRCUIT RECORD</p>
+                <p className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</p>
+            </div>
         </div>
 
         <div className="flex flex-col gap-2 absolute bottom-1 right-0">

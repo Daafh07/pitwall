@@ -1,7 +1,212 @@
+"use client"
+
+import { useState } from "react"
+import { useRouter, useSearchParams } from "next/navigation"
+import { tracks } from "../lib/tracks"
+import { races } from "../lib/calendar"
+import { LinesLeft, LinesRight } from "../components/Lines"
+import RaceCountdown from "../components/RaceCountdown"
+import TrackCanvas from "../components/TrackCanvas"
+
+type TrackKey = keyof typeof tracks
+
+const upcomingRound = 6
+
+const trackKeyByRound: Record<number, TrackKey> = {
+  6: "monaco",
+  7: "barcelona",
+  8: "austria",
+}
+
 export default function CalendarPage() {
+  const router = useRouter()
+  const searchParams = useSearchParams()
+  const initialTrack = (searchParams.get("track") as TrackKey) ?? "monaco"
+  const [selectedTrack, setSelectedTrack] = useState<TrackKey>(initialTrack)
+  const track = tracks[selectedTrack]
+  const [hoveredTrack, setHoveredTrack] = useState<TrackKey | null>(null)
+  const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
+
   return (
-    <main className="pt-[69px]">
-  <h1>Calendar</h1>
-</main>
-  );
+    <main className="bg-[#111112] overflow-hidden pt-[56px]">
+
+      <section className="relative flex flex-col items-center overflow-x-hidden pt-8 pb-14">
+
+
+        <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" />
+        <LinesRight color="#F4F4ED" className="absolute right-[-70px] top-[70px] h-[88px] pointer-events-none" />
+
+        <p className="font-semibold text-[18px] text-[#F4F4ED] mb-[-10px]">UPCOMING</p>
+
+        <div className="relative">
+          <h1 className="font-display text-[135px] leading-none text-[#F4F4ED]">CALENDAR</h1>
+          <p
+            className="absolute top-14 right-[-46px] font-marker text-[60px] -rotate-[5.5deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]"
+            style={{ color: track.colorAccent }}
+          >
+            2026
+          </p>
+        </div>
+
+      </section>
+
+      
+      <section className="relative">
+
+        
+        <div className="grid px-10 mb-2" style={{ gridTemplateColumns: '120px 320px 280px 140px 1fr' }}>
+          <p className="font-semibold text-[8px] text-[#F4F4ED]">ROUND</p>
+          <p className="font-semibold text-[8px] text-[#F4F4ED]">LOCATION</p>
+          <p className="font-semibold text-[8px] text-[#F4F4ED]">WHEN</p>
+          <p className="font-semibold text-[8px] text-[#F4F4ED]">LAPS</p>
+          <p className="font-semibold text-[8px] text-[#F4F4ED]">WINNER</p>
+        </div>
+
+        {races.map((race, i) => {
+          const roundNum = Number(race.round)
+          const trackKey = trackKeyByRound[roundNum]
+          const isSelected = trackKey === selectedTrack
+          const isHovered = trackKey === hoveredTrack
+          const isCompleted = roundNum < upcomingRound
+          const rowColor = isSelected
+            ? tracks[trackKey].colorAccent
+            : isHovered && trackKey
+              ? tracks[trackKey].colorAccent
+              : '#F4F4ED'
+          return (
+            <div key={i}>
+              <div
+
+                onMouseEnter={() => trackKey && !isSelected && setHoveredTrack(trackKey)}
+                onMouseLeave={() => setHoveredTrack(null)}
+                onMouseMove={(e) => setMousePos({ x: e.clientX, y: e.clientY })}
+
+                onClick={() => { if (trackKey) { setSelectedTrack(trackKey); router.replace(`/calendar?track=${trackKey}`, { scroll: false }) } }}
+                className={`relative grid items-center h-[80px] px-10 border-t border-b border-[#2C2C2C] ${trackKey ? 'cursor-pointer' : ''}`}
+                style={{
+                  gridTemplateColumns: '120px 320px 280px 140px 1fr',
+                  background: isSelected ? '#2C2C2C' : 'rgba(0,0,0,0.23)',
+                }}
+              >
+                <p
+                  className="absolute left-[50px] font-marker text-[80px] rotate-[16deg] leading-none pointer-events-none drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]"
+                  style={{ color: isCompleted ? track.colorAccent : 'transparent' }}
+                >
+                  /
+                </p>
+                <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.round}</p>
+                <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.location}</p>
+                <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.when}</p>
+                <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.laps}</p>
+                <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.winner}</p>
+              </div>
+
+              {isSelected && (
+                <div className="relative mx-[60px] my-12">
+                  <svg preserveAspectRatio="none" width="100%" height="100%" overflow="visible" viewBox="0 0 1367 616" fill="none" xmlns="http://www.w3.org/2000/svg" className="absolute inset-0 w-full h-full">
+                    <path d="M1267.4 613H29C14.6406 613 3 601.359 3 587V312.252C3 305.216 5.85183 298.48 10.9042 293.583L54.9832 250.858C60.0356 245.961 62.8875 239.225 62.8875 232.189V29C62.8875 14.6406 74.528 3 88.8874 3H1338C1352.36 3 1364 14.6406 1364 29L1364 436.847C1364 446.724 1358.4 455.748 1349.56 460.138L1307.84 480.834C1298.99 485.223 1293.4 494.247 1293.4 504.125L1293.4 587C1293.4 601.359 1281.76 613 1267.4 613Z" stroke={track.colorAccent} strokeWidth="6" />
+                  </svg>
+                  <div className="relative h-[520px] flex">
+
+                    <div className="flex flex-col items-center py-6 px-2 w-[54px] h-full">
+                      <p className="font-display text-[38px] leading-none whitespace-nowrap" style={{ color: '#F4F4ED', writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                        {track.geo}
+                      </p>
+                      <img src={track.flag} alt="" className="w-[25px] ml-[-5px] mt-2" />
+                    </div>
+
+                    <div className="absolute inset-0">
+                      <TrackCanvas
+                        trackFile={track.name}
+                        color={track.colorAccent}
+                        mirrorX={selectedTrack === "monaco"}
+                      />
+                    </div>
+
+                    <div className="flex flex-1 h-full px-6 pt-4 pb-6 pointer-events-none">
+                      <div className="flex gap-12">
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-[8px]" style={{ color: '#F4F4ED' }}>WHEN</p>
+                          <p className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</p>
+                          <p className="font-display text-[45px] leading-none" style={{ color: '#F4F4ED' }}>{track.month}</p>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-[8px]" style={{ color: '#F4F4ED' }}>LENGTH</p>
+                          <div className="flex items-end gap-1">
+                            <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</p>
+                            <p className="font-display text-[18px] leading-none mb-1" style={{ color: '#F4F4ED' }}>KM</p>
+                          </div>
+                        </div>
+                        <div className="flex flex-col">
+                          <p className="font-semibold text-[8px]" style={{ color: '#F4F4ED' }}>DISTANCE</p>
+                          <div className="flex items-end gap-1">
+                            <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</p>
+                            <p className="font-display text-[18px] leading-none mb-1" style={{ color: '#F4F4ED' }}>KM</p>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+
+                    <div className="absolute top-4 right-6 bottom-4 flex flex-col w-[200px] gap-6">
+                      <div>
+                        <p className="font-semibold text-[8px]" style={{ color: '#F4F4ED' }}>FACTS</p>
+                        <p className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</p>
+                      </div>
+                      <div>
+                        <p className="font-semibold text-[8px] border-b" style={{ color: '#F4F4ED', borderColor: '#282C20' }}>SCHEDULE</p>
+                        <div className="flex flex-col mt-1">
+                          {Object.values(track.schedule).map((item, index) => (
+                            <div key={index} className="flex border-b" style={{ borderColor: '#282C20' }}>
+                              <p className="font-display text-[20px] leading-tight w-[110px]" style={{ color: index === 0 ? track.colorAccent : '#F4F4ED' }}>{item.label}</p>
+                              <p className="font-display text-[20px] leading-tight w-[70px]" style={{ color: index === 0 ? track.colorAccent : '#F4F4ED' }}>{item.date}</p>
+                              <p className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : '#F4F4ED' }}>{item.time}</p>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                      <div className="mt-auto">
+                        <p className="font-semibold text-[8px]" style={{ color: '#F4F4ED' }}>CIRCUIT RECORD</p>
+                        <p className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</p>
+                      </div>
+                    </div>
+
+                    <img src="/icons/f1-logo.svg" alt="" className="absolute bottom-6 left-6 w-[70px]" />
+                    <a
+                      href={`/?track=${selectedTrack}`}
+                      className="absolute bottom-14.5 right-0 w-[46px] h-[46px] rounded-[10px] bg-[#F4F4ED] flex items-center justify-center"
+                    >
+                      <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">
+                        <circle cx="10" cy="10" r="9" stroke="#111112" strokeWidth="2"/>
+                        <rect x="9" y="8" width="2" height="7" rx="1" fill="#111112"/>
+                        <rect x="9" y="5" width="2" height="2" rx="1" fill="#111112"/>
+                      </svg>
+                    </a>
+
+                  </div>
+                </div>
+              )}
+            </div>
+          )
+        })}
+
+      </section>
+
+      <RaceCountdown targetDate={tracks.austria.raceDate} track={track} className="-mt-8" onDark={false} />
+
+      {hoveredTrack && (
+        <div
+          className="fixed pointer-events-none z-50 w-[200px] h-[150px] bg-[#2C2C2C] rounded-lg overflow-hidden"
+          style={{ left: mousePos.x + 16, top: mousePos.y + 16 }}
+        >
+          <TrackCanvas
+            speed={0.002}
+            trackFile={tracks[hoveredTrack].name}
+            color={tracks[hoveredTrack].colorAccent}
+            mirrorX={hoveredTrack === "monaco"}
+          />
+        </div>
+      )}
+
+    </main>
+  )
 }

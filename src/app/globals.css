@@ -10,6 +10,8 @@
   --color-foreground: var(--foreground);
   --font-sans: var(--font-mona-sans);
   --font-display: var(--font-bebas-neue);
+  --font-year: var(--font-big-shoulders);
+  --font-marker: var(--font-permanent-marker);
 }
 
 @media (prefers-color-scheme: dark) {
