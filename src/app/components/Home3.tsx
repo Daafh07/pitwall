@@ -3,6 +3,7 @@
 import { tracks } from "../lib/tracks";
 import { races } from "../lib/calendar";
 import RaceCountdown from "./RaceCountdown";
+import RevealText from "./RevealText";
 
 type TrackKey = keyof typeof tracks;
 type Track = typeof tracks[TrackKey];
@@ -21,7 +22,7 @@ export default function Home3({track}: {track: Track}) {
             2026
             </p>
         </div>
-        <p className="font-semibold text-[19px] leading-none -mt-2" style={{ color: track.colorYear }}>
+        <p className="font-semibold text-[19px] leading-none -mt-2" style={{ color: track.colorDark }}>
             LAST 5 2026 PERFORMANCES
         </p>
         </div>
@@ -39,21 +40,21 @@ export default function Home3({track}: {track: Track}) {
               
         {races.slice(0, 5).map((race, i) => (
         <div key={i} className="grid items-center h-[80px] px-10 bg-black/23" style={{ gridTemplateColumns: '120px 280px 320px 150px 1fr' }}>
-            <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.round}</p>
-            <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.location}</p>
-            <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.when}</p>
-            <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.laps}</p>
-            <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.winner}</p>
+            <RevealText color={track.colorAccent} delay={i * 0.05} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.round}</RevealText>
+            <RevealText color={track.colorAccent} delay={i * 0.05 + 0.05} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.location}</RevealText>
+            <RevealText color={track.colorAccent} delay={i * 0.05 + 0.1} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.when}</RevealText>
+            <RevealText color={track.colorAccent} delay={i * 0.05 + 0.15} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.laps}</RevealText>
+            <RevealText color={track.colorAccent} delay={i * 0.05 + 0.2} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{race.winner}</RevealText>
         </div>
         ))}
 
 
         <div className="grid items-center h-[80px] mt-12 px-10 bg-black/23" style={{ gridTemplateColumns: '120px 280px 320px 150px 1fr' }}>
-        <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].round}</p>
-        <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].location}</p>
-        <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].when}</p>
-        <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].laps}</p>
-        <p className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].winner}</p>
+            <RevealText color={track.colorAccent} delay={0.25} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].round}</RevealText>
+            <RevealText color={track.colorAccent} delay={0.3} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].location}</RevealText>
+            <RevealText color={track.colorAccent} delay={0.35} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].when}</RevealText>
+            <RevealText color={track.colorAccent} delay={0.4} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].laps}</RevealText>
+            <RevealText color={track.colorAccent} delay={0.45} className="font-display text-[60px] leading-none" style={{ color: track.colorText }}>{races[5].winner}</RevealText>
         </div>
 
         

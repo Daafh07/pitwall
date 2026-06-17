@@ -18,12 +18,17 @@ export default function TrackCanvas({ speed = 0.0005, trackFile = "Monaco", colo
         const observer = new ResizeObserver(() => {
             const w = canvas.clientWidth;
             const h = canvas.clientHeight;
-            if (w === 0 || h === 0) return;
+            if (w === 0 || h === 0 || !canvas.isConnected) return;
             observer.disconnect();
+            if (!canvas.isConnected) return;
 
             const scene = new THREE.Scene();
             const camera = new THREE.PerspectiveCamera(75, w / h, 0.1, 1000);
-            renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            try {
+                renderer = new THREE.WebGLRenderer({ canvas, alpha: true, antialias: true });
+            } catch {
+                return;
+            }
 
             renderer.setSize(w, h);
             renderer.setPixelRatio(window.devicePixelRatio);

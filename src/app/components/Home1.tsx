@@ -1,6 +1,9 @@
+"use client"
+
 import { tracks } from "../lib/tracks";
 import TrackCanvas from "./TrackCanvas";
 import { LinesLeft, LinesRight } from "./Lines";
+import RevealText from "./RevealText";
 
 type TrackKey = keyof typeof tracks;
 type Track = typeof tracks[TrackKey];
@@ -21,9 +24,9 @@ export default function Home1({track}: {track: Track}) {
 
         <div className="flex flex-col items-center gap-0">
             <p className="font-semibold text-[18px]" style={{ color: track.colorText }}>UPCOMING RACE</p>
-            <h1 className="font-display text-[135px] leading-none -mt-2" style={{ color: track.colorText }}>
+            <p color={track.colorAccent} className="font-display text-[135px] leading-none -mt-2" style={{ color: track.colorText }}>
                 {track.name}
-            </h1>
+            </p>
         </div>
 
         {/* Links */}
@@ -62,21 +65,21 @@ export default function Home1({track}: {track: Track}) {
             <div className="flex gap-12">
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>WHEN</p>
-                    <p className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</p>
-                    <p className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</p>
+                    <RevealText color={track.colorAccent} className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</RevealText>
+                    <RevealText color={track.colorAccent} className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</RevealText>
                 </div>
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>LENGHT</p>
                     <div className="flex items-end gap-1">
-                        <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</p>
-                        <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
+                        <RevealText color={track.colorAccent} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</RevealText>
+                        <RevealText color={track.colorAccent} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>
                     </div>
                 </div>
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>DISTANCE</p>
                     <div className="flex items-end gap-1">
-                        <p className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</p>
-                        <p className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</p>
+                        <RevealText color={track.colorAccent} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</RevealText>
+                        <RevealText color={track.colorAccent} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>
                     </div>
                 </div>
             </div>
@@ -86,23 +89,23 @@ export default function Home1({track}: {track: Track}) {
         <div className="absolute top-4 right-6 bottom-4 flex flex-col w-[200px] gap-6">
             <div>
                 <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>FACTS</p>
-                <p className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</p>
+                <RevealText color={track.colorAccent} className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</RevealText>
             </div>
             <div>
                 <p className="font-semibold text-[8px] border-b" style={{ color: track.colorText, borderColor: track.colorAccent + '40' }}>SCHEDULE</p>
                 <div className="flex flex-col mt-1">
                     {Object.values(track.schedule).map((item, index) => (
                         <div key={index} className="flex border-b" style={{ borderColor: track.colorAccent + '40' }}>
-                            <p className="font-display text-[20px] leading-tight w-[110px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</p>
-                            <p className="font-display text-[20px] leading-tight w-[70px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</p>
-                            <p className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</p>
+                            <RevealText color={track.colorAccent} delay={index * 0.05} className="font-display text-[20px] leading-tight w-[100px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</RevealText>
+                            <RevealText color={track.colorAccent} delay={index * 0.05 + 0.05} className="font-display text-[20px] leading-tight w-[65px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</RevealText>
+                            <RevealText color={track.colorAccent} delay={index * 0.05 + 0.1} className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</RevealText>
                         </div>
                     ))}
                 </div>
             </div>
             <div className="mt-auto">
                 <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>CIRCUIT RECORD</p>
-                <p className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</p>
+                <RevealText color={track.colorAccent} className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</RevealText>
             </div>
         </div>
 
