@@ -36,7 +36,7 @@ export default function Header() {
 
         <span className="absolute left-1/2 -translate-x-1/2 font-display text-[26px] text-[#F4F4ED] flex items-center gap-2">
             <img src="/icons/vector-left.svg" alt="Left" className="h-4" />
-          PITWALL
+          <Link href="/">PITWALL</Link>
             <img src="/icons/vector-right.svg" alt="Right" className="h-4" />
         </span>
 

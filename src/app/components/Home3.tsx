@@ -22,9 +22,7 @@ export default function Home3({track}: {track: Track}) {
             2026
             </p>
         </div>
-        <p className="font-semibold text-[19px] leading-none -mt-2" style={{ color: track.colorDark }}>
-            LAST 5 2026 PERFORMANCES
-        </p>
+        <p className="font-semibold text-[19px] leading-none -mt-2" style={{ color: track.colorDark }}>LAST 5 2026 PERFORMANCES</p>
         </div>
 
 

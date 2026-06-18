@@ -24,18 +24,18 @@ const trackKeyByRound: Record<number, TrackKey> = {
 export default function CalendarPage() {
   const router = useRouter()
   const searchParams = useSearchParams()
-  const initialTrack = (searchParams.get("track") as TrackKey) ?? "monaco"
-  const [selectedTrack, setSelectedTrack] = useState<TrackKey>(initialTrack)
-  const track = tracks[selectedTrack]
+  const initialTrack = searchParams.get("track") as TrackKey | null
+  const [selectedTrack, setSelectedTrack] = useState<TrackKey | null>(initialTrack)
+  const track = selectedTrack ? tracks[selectedTrack] : tracks.monaco
   const [hoveredTrack, setHoveredTrack] = useState<TrackKey | null>(null)
   const [mousePos, setMousePos] = useState({ x: 0, y: 0 })
 
 
 
   return (
-    <main className="bg-[#111112] overflow-hidden pt-[56px]">
+    <main className="bg-[#111112] pt-[56px] overflow-x-clip">
 
-      <section className="relative flex flex-col items-center overflow-x-hidden pt-8 pb-14">
+      <section className="relative flex flex-col items-center pt-10 pb-14 overflow-x-clip">
 
 
         <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" />
@@ -56,10 +56,10 @@ export default function CalendarPage() {
       </section>
 
       
-      <section className="relative">
+      <section>
 
-        
-        <div className="grid px-10 mb-2" style={{ gridTemplateColumns: '120px 320px 280px 140px 1fr' }}>
+
+        <div className="grid px-10 mb-2 sticky top-[56px] z-10 bg-[#111112] py-2" style={{ gridTemplateColumns: '120px 320px 280px 140px 1fr' }}>
           <p className="font-semibold text-[8px] text-[#F4F4ED]">ROUND</p>
           <p className="font-semibold text-[8px] text-[#F4F4ED]">LOCATION</p>
           <p className="font-semibold text-[8px] text-[#F4F4ED]">WHEN</p>
@@ -90,7 +90,7 @@ export default function CalendarPage() {
                 className={`relative grid items-center h-[80px] px-10 border-t border-b border-[#2C2C2C] ${trackKey ? 'cursor-pointer' : ''}`}
                 style={{
                   gridTemplateColumns: '120px 320px 280px 140px 1fr',
-                  background: isSelected ? '#2C2C2C' : 'rgba(0,0,0,0.23)',
+                  background: isSelected ? '#2c2c2c' : isHovered && trackKey ? '#2c2c2c' : 'rgba(0,0,0,0.23)',
                 }}
               >
                 <p
@@ -110,7 +110,7 @@ export default function CalendarPage() {
                   initial={{ x: 0 }}
                   whileInView={{ x: "100%" }}
                   transition={{ duration: 0.6, ease: "easeInOut", delay: i * 0.05 }}
-                  viewport={{ once: true }}
+                  viewport={{ once: true, amount: 0.1 }}
                 />
               </div>
               <AnimatePresence mode="wait">
