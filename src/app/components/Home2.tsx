@@ -4,6 +4,7 @@ import { tracks } from "../lib/tracks";
 import DecorDots from "./DecorDots";
 import { motion } from "framer-motion"
 import RevealText from "../components/RevealText"
+import RevealMarker from "../components/RevealMarker"
 
 
 
@@ -20,13 +21,18 @@ export default function Home2({track}: {track: Track}) {
         <h2 className="relative font-display text-[135px] leading-none -mt-2" style={{ color: track.colorText }}>
           {track.name.toUpperCase()}
         </h2>
-        <p className="font-semibold text-[16px] leading-none -mt-3" style={{ color: track.colorPrimary }}>LAST GP WINNERS</p>
+        <RevealMarker color={track.colorPrimary} className="font-semibold text-[16px] leading-none -mt-3">LAST GP WINNERS</RevealMarker>
       </div>
 
       {track.winners.map((winner, index) => (
         <div key={index} className="relative flex items-center h-[900px] -mt-25">
      
-        <p className="absolute inset-0 flex items-center justify-center font-year tracking-tight text-[565px] leading-none" style={{ color: track.colorYear }}>{winner.year}</p>
+        <motion.p className="absolute inset-0 flex items-center justify-center font-year tracking-tight text-[565px] leading-none" style={{ color: track.colorYear }}
+          initial={{ opacity: 0, y: 40 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          transition={{ duration: 1.4, ease: "easeOut" }}
+          viewport={{ once: true }}
+        >{winner.year}</motion.p>
 
         <DecorDots color={track.colorAccent} className={`absolute pointer-events-none ${[" scale-y-[-1]", "", " scale-y-[-1]"][index % 3]}`} style={{left: `${[-580, -540, -500][index % 3]}px`, width: '718px', top: index === 1 ? 'calc(50% - 280px)' : `calc(50% + ${[120, 180][index === 0 ? 0 : 1]}px)`}} />
         <DecorDots color={track.colorAccent} className={`absolute pointer-events-none scale-x-[-1]${["", " scale-y-[-1]", ""][index % 3]}`} style={{right: `${[-430, -460, -400][index % 3]}px`, width: '718px', top: index === 1 ? 'calc(50% + 60px)' : `calc(50% - ${[210, 150][index === 0 ? 0 : 1]}px)`}} />
@@ -37,7 +43,7 @@ export default function Home2({track}: {track: Track}) {
             src={winner.image}
             alt={winner.name}
             className={`absolute bottom-[-1px] h-[700px] ${winner.side === "right" ? "right-[20%]" : "left-[20%] scale-x-[-1]"}`}
-            initial={{ x: winner.side === "right" ? 200 : -200, opacity: 0 }}
+            initial={{ x: winner.side === "right" ? 200 : 200, opacity: 0 }}
             whileInView={{ x: 0, opacity: 1 }}
             transition={{ duration: 1.2, ease: "easeOut" }}
             viewport={{ once: true }}

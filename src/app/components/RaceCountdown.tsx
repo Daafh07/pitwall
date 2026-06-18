@@ -1,6 +1,7 @@
 "use client"
 
 import { useState, useEffect } from "react"
+import RevealMarker from "./RevealMarker"
 import { LinesLeft, LinesRight } from "./Lines"
 import TrackCanvas from "./TrackCanvas"
 import { tracks } from "../lib/tracks"
@@ -31,8 +32,8 @@ export default function RaceCountdown({ targetDate, track, className = "", onDar
   return (
     <div className={`relative flex items-center justify-center pt-20 pb-22 ${className}`}>
 
-      <LinesLeft color={textColor} className="absolute left-[-140px] w-[300px] mt-10 pointer-events-none" />
-      <LinesRight color={textColor} className="absolute right-[-140px] w-[300px] mt-10 pointer-events-none" />
+      <LinesLeft color={textColor} className="absolute left-[-140px] w-[300px] mt-10 pointer-events-none" delay={0.7} />
+      <LinesRight color={textColor} className="absolute right-[-140px] w-[300px] mt-10 pointer-events-none" delay={0.7} />
 
       <div className="relative flex flex-col -mt-6 items-center">
         <div className="w-[180px] h-[80px] mb-2">
@@ -47,9 +48,9 @@ export default function RaceCountdown({ targetDate, track, className = "", onDar
         </p>
       </div>
 
-      <p className="absolute font-marker mt-[58px] text-[92px] -rotate-[8.79deg] pointer-events-none" style={{ color: yearColor }}>
+      <RevealMarker color={yearColor} className="absolute font-marker mt-[58px] text-[92px] -rotate-[8.79deg] pointer-events-none">
         RACE DAY
-      </p>
+      </RevealMarker>
 
     </div>
   )

@@ -8,6 +8,7 @@ import { LinesLeft, LinesRight } from "../components/Lines"
 import RaceCountdown from "../components/RaceCountdown"
 import TrackCanvas from "../components/TrackCanvas"
 import { AnimatePresence, motion } from "framer-motion"
+import RevealMarker from "../components/RevealMarker"
 import RevealText from "../components/RevealText"
 
 
@@ -38,19 +39,16 @@ export default function CalendarPage() {
       <section className="relative flex flex-col items-center pt-10 pb-14 overflow-x-clip">
 
 
-        <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" />
-        <LinesRight color="#F4F4ED" className="absolute right-[-70px] top-[70px] h-[88px] pointer-events-none" />
+        <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" delay={0.7} />
+        <LinesRight color="#F4F4ED" className="absolute right-[-70px] top-[70px] h-[88px] pointer-events-none" delay={0.7} />
 
         <p className="font-semibold text-[18px] text-[#F4F4ED] mb-[-10px]">UPCOMING</p>
 
         <div className="relative">
           <h1 className="font-display text-[135px] leading-none text-[#F4F4ED]">CALENDAR</h1>
-          <p
-            className="absolute top-14 right-[-46px] font-marker text-[60px] -rotate-[5.5deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]"
-            style={{ color: track.colorAccent }}
-          >
+          <RevealMarker color={track.colorAccent} className="absolute top-14 right-[-46px] font-marker text-[60px] -rotate-[5.5deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]">
             2026
-          </p>
+          </RevealMarker>
         </div>
 
       </section>
@@ -93,12 +91,18 @@ export default function CalendarPage() {
                   background: isSelected ? '#2c2c2c' : isHovered && trackKey ? '#2c2c2c' : 'rgba(0,0,0,0.23)',
                 }}
               >
-                <p
-                  className="absolute left-[50px] font-marker text-[80px] rotate-[16deg] leading-none pointer-events-none drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]"
-                  style={{ color: isCompleted ? track.colorAccent : 'transparent' }}
-                >
-                  /
-                </p>
+                {isCompleted && (
+                  <motion.p
+                    className="absolute left-[50px] font-marker text-[80px] rotate-[16deg] leading-none pointer-events-none drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]"
+                    style={{ color: track.colorAccent }}
+                    initial={{ clipPath: "inset(-20px 100% -20px -20px)", opacity: 0 }}
+                    whileInView={{ clipPath: "inset(-20px -20px -20px -20px)", opacity: 1 }}
+                    transition={{ duration: 0.5, ease: "easeOut", delay: 0.4 + i * 0.05 }}
+                    viewport={{ once: true }}
+                  >
+                    /
+                  </motion.p>
+                )}
                 <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.round}</p>
                 <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.location}</p>
                 <p className="font-display text-[60px]" style={{ color: rowColor, transition: 'color 0.3s ease' }}>{race.when}</p>
@@ -196,7 +200,7 @@ export default function CalendarPage() {
 
                     <img src="/icons/f1-logo.svg" alt="" className="absolute bottom-6 left-6 w-[70px]" />
                     <a
-                      href={`/?track=${selectedTrack}`}
+                      href={`/?track=${selectedTrack}&from=calendar`}
                       className="absolute bottom-14.5 right-0 w-[46px] h-[46px] rounded-[10px] bg-[#F4F4ED] flex items-center justify-center"
                     >
                       <svg width="20" height="20" viewBox="0 0 20 20" fill="none" xmlns="http://www.w3.org/2000/svg">

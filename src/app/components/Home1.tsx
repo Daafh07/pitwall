@@ -1,26 +1,35 @@
 "use client"
 
+import { useState, useEffect } from "react"
 import { tracks } from "../lib/tracks";
 import TrackCanvas from "./TrackCanvas";
 import { LinesLeft, LinesRight } from "./Lines";
-import RevealText from "./RevealText";
+import RevealText from "./RevealText"
+import RevealMarker from "./RevealMarker";
 
 type TrackKey = keyof typeof tracks;
 type Track = typeof tracks[TrackKey];
 
 
-export default function Home1({track}: {track: Track}) {
+export default function Home1({track, ready = true}: {track: Track, ready?: boolean}) {
   const trackOrder = ["monaco", "barcelona", "austria"] as const;
   const currentIndex = trackOrder.indexOf(track.name.toLowerCase() as typeof trackOrder[number]);
   const nextTrack = trackOrder[(currentIndex + 1) % trackOrder.length];
   const prevTrack = trackOrder[(currentIndex - 1 + trackOrder.length) % trackOrder.length];
 
+  const [linesReady, setLinesReady] = useState(false)
+  useEffect(() => {
+    if (!ready) return
+    const t = setTimeout(() => setLinesReady(true), 700)
+    return () => clearTimeout(t)
+  }, [ready])
+
 
   return (
     <section className="relative min-h-screen pt-[70px] pb-[55px]" style={{ background: `${track.gradientDown}` }}>
 
-        <LinesLeft color={track.colorText} className="absolute left-0 top-[105px] h-[88px] pointer-events-none" />
-        <LinesRight color={track.colorText} className="absolute right-0 top-[110px] h-[88px] pointer-events-none" />
+        {linesReady && <LinesLeft color={track.colorText} className="absolute left-0 top-[105px] h-[88px] pointer-events-none" />}
+        {linesReady && <LinesRight color={track.colorText} className="absolute right-0 top-[110px] h-[88px] pointer-events-none" />}
 
         <div className="flex flex-col items-center gap-0">
             <p className="font-semibold text-[18px]" style={{ color: track.colorText }}>UPCOMING RACE</p>
@@ -38,9 +47,9 @@ export default function Home1({track}: {track: Track}) {
             <div className="flex flex-col items-center py-6 px-2 w-[54px] h-full">
 
                 <div className="flex items-center justify-center -mt-6 w-[54px]">
-                    <p className="font-display text-[38px] leading-none whitespace-nowrap" style={{ color: track.colorText, writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
+                    <RevealMarker color={track.colorText} delay={0.3} direction="btt" triggered={ready} className="font-display text-[38px] leading-none whitespace-nowrap" style={{ writingMode: "vertical-rl", transform: "rotate(180deg)" }}>
                         {track.geo}
-                    </p>
+                    </RevealMarker>
                 </div>
                 <img src={track.flag} alt="" className="w-[25px] ml-[-5px] mt-2" />
 
@@ -65,21 +74,21 @@ export default function Home1({track}: {track: Track}) {
             <div className="flex gap-12">
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>WHEN</p>
-                    <RevealText color={track.colorAccent} className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</RevealText>
-                    <RevealText color={track.colorAccent} className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</RevealText>
+                    {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.8} className="font-display text-[45px] leading-none" style={{ color: track.colorAccent }}>{track.date_start}-{track.date_end}</RevealText>}
+                    {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.9} className="font-display text-[45px] leading-none" style={{ color: track.colorText }}>{track.month}</RevealText>}
                 </div>
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>LENGHT</p>
                     <div className="flex items-end gap-1">
-                        <RevealText color={track.colorAccent} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</RevealText>
-                        <RevealText color={track.colorAccent} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>
+                        {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.9} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.track_length.replace(' km', '')}</RevealText>}
+                        {ready && <RevealText triggered={ready} color={track.colorAccent} delay={1.0} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>}
                     </div>
                 </div>
                 <div className="flex flex-col">
                     <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>DISTANCE</p>
                     <div className="flex items-end gap-1">
-                        <RevealText color={track.colorAccent} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</RevealText>
-                        <RevealText color={track.colorAccent} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>
+                        {ready && <RevealText triggered={ready} color={track.colorAccent} delay={1.0} className="font-display text-[30px] leading-none" style={{ color: track.colorAccent }}>{track.race_distance.replace(' km', '')}</RevealText>}
+                        {ready && <RevealText triggered={ready} color={track.colorAccent} delay={1.1} className="font-display text-[18px] leading-none mb-1" style={{ color: track.colorText }}>KM</RevealText>}
                     </div>
                 </div>
             </div>
@@ -89,23 +98,23 @@ export default function Home1({track}: {track: Track}) {
         <div className="absolute top-4 right-6 bottom-4 flex flex-col w-[200px] gap-6">
             <div>
                 <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>FACTS</p>
-                <RevealText color={track.colorAccent} className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</RevealText>
+                {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.8} className="font-semibold text-[12px] text-[#F4F4ED] mt-1">{track.facts}</RevealText>}
             </div>
             <div>
                 <p className="font-semibold text-[8px] border-b" style={{ color: track.colorText, borderColor: track.colorAccent + '40' }}>SCHEDULE</p>
                 <div className="flex flex-col mt-1">
                     {Object.values(track.schedule).map((item, index) => (
                         <div key={index} className="flex border-b" style={{ borderColor: track.colorAccent + '40' }}>
-                            <RevealText color={track.colorAccent} delay={index * 0.05} className="font-display text-[20px] leading-tight w-[100px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</RevealText>
-                            <RevealText color={track.colorAccent} delay={index * 0.05 + 0.05} className="font-display text-[20px] leading-tight w-[65px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</RevealText>
-                            <RevealText color={track.colorAccent} delay={index * 0.05 + 0.1} className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</RevealText>
+                            {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.8 + index * 0.05} className="font-display text-[20px] leading-tight w-[100px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.label}</RevealText>}
+                            {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.8 + index * 0.05 + 0.05} className="font-display text-[20px] leading-tight w-[65px]" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.date}</RevealText>}
+                            {ready && <RevealText triggered={ready} color={track.colorAccent} delay={0.8 + index * 0.05 + 0.1} className="font-display text-[20px] leading-tight" style={{ color: index === 0 ? track.colorAccent : track.colorText }}>{item.time}</RevealText>}
                         </div>
                     ))}
                 </div>
             </div>
             <div className="mt-auto">
                 <p className="font-semibold text-[8px]" style={{ color: track.colorText }}>CIRCUIT RECORD</p>
-                <RevealText color={track.colorAccent} className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</RevealText>
+                {ready && <RevealText triggered={ready} color={track.colorAccent} delay={1.1} className="font-semibold text-[12px] text-[#F4F4ED]">{track.circuit_record} {track.record_driver}</RevealText>}
             </div>
         </div>
 

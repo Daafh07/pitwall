@@ -12,6 +12,10 @@
   --font-display: var(--font-bebas-neue);
   --font-year: var(--font-big-shoulders);
   --font-marker: var(--font-permanent-marker);
+  --font-figtree: var(--font-figtree);
+  --font-oswald: var(--font-oswald);
+  --font-sedgwick: var(--font-sedgwick-ave);
+  --font-belanosima: var(--font-belanosima);
 }
 
 @media (prefers-color-scheme: dark) {

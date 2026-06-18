@@ -1,3 +1,7 @@
+"use client"
+
+import { motion } from "framer-motion"
+
 type Props = {
   color: string
   className?: string
@@ -13,8 +17,24 @@ export function DriverDecor({ color, className = "", flip = false }: Props) {
       className={className}
       style={flip ? { transform: "rotate(180deg)" } : {}}
     >
-      <line x1="12.66" y1="4.5" x2="243" y2="4.5" stroke={color} strokeWidth="7"/>
-      <line x1="0" y1="30" x2="243" y2="30" stroke={color} strokeWidth="7"/>
+      <motion.line
+        x1="12.66" y1="4.5" x2="243" y2="4.5"
+        stroke={color} strokeWidth="7"
+        strokeDasharray={230.34}
+        initial={{ strokeDashoffset: -230.34 }}
+        whileInView={{ strokeDashoffset: 0 }}
+        transition={{ duration: 0.6, ease: "easeOut" }}
+        viewport={{ once: true }}
+      />
+      <motion.line
+        x1="0" y1="30" x2="243" y2="30"
+        stroke={color} strokeWidth="7"
+        strokeDasharray={243}
+        initial={{ strokeDashoffset: -243 }}
+        whileInView={{ strokeDashoffset: 0 }}
+        transition={{ duration: 0.6, delay: 0.08, ease: "easeOut" }}
+        viewport={{ once: true }}
+      />
     </svg>
   )
 }

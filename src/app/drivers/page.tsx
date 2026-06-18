@@ -5,6 +5,7 @@ import { DriverDecor } from "../components/DriverDecor"
 import { drivers } from "../lib/drivers"
 import RevealText from "../components/RevealText"
 import { motion } from "framer-motion"
+import RevealMarker from "../components/RevealMarker"
 
 
 export default function DriversPage() {
@@ -14,12 +15,12 @@ export default function DriversPage() {
           <section className="relative flex flex-col items-center pt-14 pb-14 overflow-x-clip">
     
     
-            <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" />
-            <LinesRight color="#F4F4ED" className="absolute right-[-70px] top-[70px] h-[88px] pointer-events-none" />
+            <LinesLeft color="#F4F4ED" className="absolute left-[-70px] top-[65px] h-[88px] pointer-events-none" delay={0.7} />
+            <LinesRight color="#F4F4ED" className="absolute right-[-70px] top-[70px] h-[88px] pointer-events-none" delay={0.7} />
     
             <div className="relative">
               <h1 className="font-display text-[135px] leading-none text-[#F4F4ED]">DRIVERS</h1>
-              <p className="absolute top-14 right-[-60px] font-marker text-[60px] -rotate-[5.5deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]" style={{ color: "#ff7474" }}>2026</p>
+              <RevealMarker color="#ff7474" className="absolute top-14 right-[-60px] font-marker text-[60px] -rotate-[5.5deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]">2026</RevealMarker>
             </div>
     
           </section>
@@ -41,12 +42,16 @@ export default function DriversPage() {
                 <img src={driver.teamicon} alt="" className="w-[17px] mt-0.5" />
               </div>
 
-              <p
+              <motion.p
                 className="absolute right-28 top-7 font-year leading-none select-none pointer-events-none text-[280px]"
                 style={{ color: driver.numberColor }}
+                initial={{ opacity: 0, y: 30 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                transition={{ duration: 1.4, ease: "easeOut" }}
+                viewport={{ once: true }}
               >
                 {driver.number}
-              </p>
+              </motion.p>
 
               <div className="absolute right-0 top-18 bottom-0 h-full w-[45%] overflow-hidden pointer-events-none">
                 <motion.img

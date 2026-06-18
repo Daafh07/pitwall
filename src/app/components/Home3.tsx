@@ -4,6 +4,7 @@ import { tracks } from "../lib/tracks";
 import { races } from "../lib/calendar";
 import RaceCountdown from "./RaceCountdown";
 import RevealText from "./RevealText";
+import RevealMarker from "./RevealMarker";
 
 type TrackKey = keyof typeof tracks;
 type Track = typeof tracks[TrackKey];
@@ -18,11 +19,11 @@ export default function Home3({track}: {track: Track}) {
             <h2 className="font-display text-[135px] leading-none" style={{ color: track.colorText }}>
             HISTORY MADE
             </h2>
-            <p className="absolute top-14 right-[-45px] font-marker text-[60px] -rotate-[8deg] xt-[76px] -rotate-[7deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]" style={{ color: track.colorYear }}>
-            2026
-            </p>
+            <RevealMarker color={track.colorYear} className="absolute top-14 right-[-45px] font-marker text-[60px] -rotate-[8deg] drop-shadow-[0px_4px_4px_rgba(0,0,0,0.34)]">
+              2026
+            </RevealMarker>
         </div>
-        <p className="font-semibold text-[19px] leading-none -mt-2" style={{ color: track.colorDark }}>LAST 5 2026 PERFORMANCES</p>
+        <RevealMarker color={track.colorDark} className="font-semibold text-[19px] leading-none -mt-2">LAST 5 2026 PERFORMANCES</RevealMarker>
         </div>
 
 
