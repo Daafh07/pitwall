@@ -1,6 +1,6 @@
 "use client"
 
-import { useState } from "react"
+import { Suspense, useState } from "react"
 import { useRouter, useSearchParams } from "next/navigation"
 import { tracks } from "../lib/tracks"
 import { races } from "../lib/calendar"
@@ -23,6 +23,10 @@ const trackKeyByRound: Record<number, TrackKey> = {
 }
 
 export default function CalendarPage() {
+  return <Suspense><CalendarContent /></Suspense>
+}
+
+function CalendarContent() {
   const router = useRouter()
   const searchParams = useSearchParams()
   const initialTrack = searchParams.get("track") as TrackKey | null

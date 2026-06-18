@@ -3,6 +3,7 @@ import { Bebas_Neue, Mona_Sans, Big_Shoulders, Permanent_Marker, Figtree, Oswald
 import "./globals.css";
 import Header from "./components/Header";
 import Footer from "./components/Footer";
+import { Suspense } from "react";
 
 
 const bebasNeue = Bebas_Neue({
@@ -76,7 +77,9 @@ export default function RootLayout({
     >
       <body className="min-h-full select-none flex flex-col">
 
-        <Header />
+        <Suspense>
+          <Header />
+        </Suspense>
         {children}
         <Footer />
         
