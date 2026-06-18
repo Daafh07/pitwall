@@ -1,4 +1,4 @@
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
 import { Bebas_Neue, Mona_Sans, Big_Shoulders, Permanent_Marker, Figtree, Oswald, Sedgwick_Ave, Belanosima } from "next/font/google";
 import "./globals.css";
 import Header from "./components/Header";
@@ -59,6 +59,11 @@ const belanosima = Belanosima({
   display: "swap",
 });
 
+
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
+}
 
 export const metadata: Metadata = {
   title: "PITWALL",
